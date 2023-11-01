@@ -1,7 +1,6 @@
-# This file is where game logic lives. No input
-# or output happens here. The logic in this file
-# should be unit-testable.
 
+# Business logic functions
+# Can be used across use cases, maybe in other games
 
 def make_empty_board():
     return [
@@ -9,30 +8,6 @@ def make_empty_board():
         [None, None, None],
         [None, None, None],
     ]
-
-
-
-
-def input_move():
-    while True:
-        move = input("Please enter a move in the format (row,col): ")
-        try:
-            row, col = map(int, move.split(','))
-            if 0 <= row < 3 and 0 <= col < 3:
-                return row, col
-            else:
-                print("Invalid move. Coordinates should be between 0 and 2.")
-        except ValueError:
-            print("Please enter a move in the format (row,col): ")
-
-
-
-
-def display(board):
-    for item in board:
-         print(item)
-
-
 
 
 def get_winner(board):
@@ -55,9 +30,32 @@ def get_winner(board):
 
 
 
-
 def other_player(player):
     if player == 'X':
          return 'O'
     if player == 'O':
          return 'X'
+
+
+
+
+# User Interaction
+def input_move():
+    while True:
+        move = input("Please enter a move in the format (row,col): ")
+        try:
+            row, col = map(int, move.split(','))
+            if 0 <= row < 3 and 0 <= col < 3:
+                return row, col
+            else:
+                print("Invalid move. Coordinates should be between 0 and 2.")
+        except ValueError:
+            print("Please enter a move in the format (row,col): ")
+
+
+
+
+def display(board):
+    for item in board:
+         print(item)
+
