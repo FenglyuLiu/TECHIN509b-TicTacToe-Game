@@ -2,60 +2,92 @@
 # Business logic functions
 # Can be used across use cases, maybe in other games
 
-def make_empty_board():
-    return [
-        [None, None, None],
-        [None, None, None],
-        [None, None, None],
-    ]
+import random
 
+class Board:
+    def __init__(self):
+        self._rows = [[None, None, None] for _ in range(3)]
 
-def get_winner(board):
-    outcome = ['X', 'O', ' ']
-    index = 0
+    def get(self, x, y):
+        return self._rows[y][x]
 
-    for i in range(3):
-         if board[i] == ['X','X','X'] or board[0][i] == board[1][i] == board[2][i] == 'X' or board[0][0] == board[1][1] == board[2][2] == 'X' or board[0][2] == board[1][1] == board[0][2] == 'X':
-    #all the "X won" cases
-              index = 0
-              break
-         if board[i] == ['O','O','O'] or board[0][i] == board[1][i] == board[2][i] == 'O' or board[0][0] == board[1][1] == board[2][2] == 'O' or board[0][2] == board[1][1] == board[0][2] == 'O':
-    #all the "O won" cases
-              index = 1
-              break
-         else:
-              index = 2
+    def set(self, x, y, value):
+        if self._rows[y][x] is None:
+            self._rows[y][x] = value
+        else:
+            raise ValueError("The cell is already occupied.")
 
-    return outcome[index] 
+    def available_moves(self):
+        return [(x, y) for y in range(3) for x in range(3) if self.get(x, y) is None]
 
+    def is_winner(self, player):
+        lines = [
+            [(0, 0), (0, 1), (0, 2)],
+            [(1, 0), (1, 1), (1, 2)],
+            [(2, 0), (2, 1), (2, 2)],
+            [(0, 0), (1, 0), (2, 0)],
+            [(0, 1), (1, 1), (2, 1)],
+            [(0, 2), (1, 2), (2, 2)],
+            [(0, 0), (1, 1), (2, 2)],
+            [(0, 2), (1, 1), (2, 0)],
+        ]
+        for line in lines:
+            if all(self.get(x, y) == player.marker for x, y in line):
+                return True
+        return False
 
+    def is_draw(self):
+        return all(self.get(x, y) is not None for y in range(3) for x in range(3))
 
-def other_player(player):
-    if player == 'X':
-         return 'O'
-    if player == 'O':
-         return 'X'
+    def display(self):
+        symbols = {None: ' ', 'X': 'X', 'O': 'O'}
+        for row in self._rows:
+            print("|".join(symbols[cell] for cell in row))
+            print("-" * 5)
 
+class Player:
+    def __init__(self, marker):
+        self.marker = marker
 
+    def get_move(self, board):
+        while True:
+            try:
+                x, y = map(int, input(f"Player {self.marker}, enter your move (x y): ").split())
+                if (x, y) in board.available_moves():
+                    return x, y
+                else:
+                    print("That spot is already taken or invalid.")
+            except ValueError:
+                print("Please enter the coordinates as x y, with x and y being numbers from 0 to 2.")
 
+class Bot(Player):
+    def get_move(self, board):
+        return random.choice(board.available_moves())
 
-# User Interaction
-def input_move():
-    while True:
-        move = input("Please enter a move in the format (row,col): ")
-        try:
-            row, col = map(int, move.split(','))
-            if 0 <= row < 3 and 0 <= col < 3:
-                return row, col
-            else:
-                print("Invalid move. Coordinates should be between 0 and 2.")
-        except ValueError:
-            print("Please enter a move in the format (row,col): ")
+class Game:
+    def __init__(self, player1, player2):
+        self.board = Board()
+        self.players = [player1, player2]
+        self.current_player = 0  # Player 1 starts
 
+    def switch_player(self):
+        self.current_player = 1 - self.current_player
 
-
-
-def display(board):
-    for item in board:
-         print(item)
+    def play(self):
+        while True:
+            self.board.display()
+            player = self.players[self.current_player]
+            x, y = player.get_move(self.board)
+            self.board.set(x, y, player.marker)
+            
+            if self.board.is_winner(player):
+                self.board.display()
+                print(f"Player {player.marker} wins!")
+                break
+            elif self.board.is_draw():
+                self.board.display()
+                print("It's a draw!")
+                break
+            
+            self.switch_player()
 
