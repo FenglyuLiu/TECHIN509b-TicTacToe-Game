@@ -1,7 +1,5 @@
 # Week 8 - Lab Submission (TicTacToe with Tests) 
 
-Please submit the link in the following format: "https://github.com/xxxxxxx/repository_name.git"
-
 The goal of this assignment is to add unit tests to the Tic Tac Toe game:
 
 All the tests should live in tests.py
