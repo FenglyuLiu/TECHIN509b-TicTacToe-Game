@@ -44,6 +44,7 @@ class Board:
         for row in self._rows:
             print("|".join(symbols[cell] for cell in row))
             print("-" * 5)
+        print("*********************")
 
 class Player:
     def __init__(self, marker):
@@ -91,3 +92,12 @@ class Game:
             
             self.switch_player()
 
+def evaluate_game_state(board):
+    if board.is_winner(Player('X')):
+        return 'X wins'
+    elif board.is_winner(Player('O')):
+        return 'O wins'
+    elif board.is_draw():
+        return 'Draw'
+    else:
+        return 'Game ongoing'
