@@ -92,6 +92,7 @@ class Game:
             
             self.switch_player()
 
+
 def evaluate_game_state(board):
     if board.is_winner(Player('X')):
         return 'X wins'
