@@ -3,6 +3,8 @@
 # Can be used across use cases, maybe in other games
 
 import random
+import csv
+from datetime import datetime
 
 class Board:
     def __init__(self):
@@ -74,6 +76,11 @@ class Game:
     def switch_player(self):
         self.current_player = 1 - self.current_player
 
+    def log_winner(self, winner):
+        with open('logs/game_log.csv', 'a', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow([datetime.now().strftime("%Y-%m-%d %H:%M:%S"), winner])
+
     def play(self):
         while True:
             self.board.display()
@@ -83,11 +90,14 @@ class Game:
             
             if self.board.is_winner(player):
                 self.board.display()
+                winner = f"Player {player.marker}"
                 print(f"Player {player.marker} wins!")
+                self.log_winner(winner)
                 break
             elif self.board.is_draw():
                 self.board.display()
                 print("It's a draw!")
+                self.log_winner('Draw')
                 break
             
             self.switch_player()
