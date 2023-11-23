@@ -105,10 +105,13 @@ class Game:
 
 def evaluate_game_state(board):
     if board.is_winner(Player('X')):
+        self.log_winner('X')
         return 'X wins'
     elif board.is_winner(Player('O')):
+        self.log_winner('O')
         return 'O wins'
     elif board.is_draw():
+        self.log_winner('Draw')
         return 'Draw'
     else:
         return 'Game ongoing'
