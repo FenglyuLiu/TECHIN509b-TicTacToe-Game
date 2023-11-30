@@ -76,34 +76,51 @@ class Game:
     def switch_player(self):
         self.current_player = 1 - self.current_player
 
-    def log_winner(self, winner):
-        with open('logs/game_log.csv', 'a', newline='') as file:
+    def log_game(self, first_move_position, player1_marker, player2_marker, winner):
+        with open('logs/game_log_v02.csv', 'a', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow([datetime.now().strftime("%Y-%m-%d %H:%M:%S"), winner])
+            writer.writerow([datetime.now().strftime("%Y-%m-%d %H:%M:%S"), first_move_position, player1_marker, player2_marker, winner])
 
     def play(self):
+        first_move_logged = False
+        first_move_position = None
+
         while True:
             self.board.display()
             player = self.players[self.current_player]
             x, y = player.get_move(self.board)
             self.board.set(x, y, player.marker)
             
+            # Due to the central and axial symmetry of the nine positions in the Tic-tac-toe game, 
+            # there are only three unique positions, namely 
+            # the "corner", the "center", and the center of the edge “middle”
+            # Log the first move position
+            if not first_move_logged:
+
+                if (x, y) in [(0, 0), (0, 2), (2, 0), (2, 2)]:
+                    first_move_position = 'corner'
+                elif (x, y) == (1, 1):
+                    first_move_position = 'center'
+                else:
+                    first_move_position = 'middle'
+                first_move_logged = True
+
             if self.board.is_winner(player):
                 self.board.display()
                 winner = f"Player {player.marker}"
                 print(f"Player {player.marker} wins!")
-                self.log_winner(winner)
+                self.log_game(first_move_position, self.players[0].marker, self.players[1].marker, winner)
                 break
             elif self.board.is_draw():
                 self.board.display()
                 print("It's a draw!")
-                self.log_winner('Draw')
+                self.log_game(first_move_position, self.players[0].marker, self.players[1].marker, 'Draw')
                 break
             
             self.switch_player()
 
 
-def evaluate_game_state(board):
+def evaluate_game_state(self,board):
     if board.is_winner(Player('X')):
         self.log_winner('X')
         return 'X wins'
