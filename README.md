@@ -11,12 +11,20 @@ In the second half of the course, students will develop and application that all
 At the end of this course students should:
 
 Feel confident building applications in Python
+
 Understand basic test-driven and collaborative software development techniques
+
 Have accurate expectations about what can be built in Python
+
 Know how to leverage the scientific computing stack in Python to perform analyses
+
 Be comfortable navigating Python documentation
+
 Be able to navigate the command line
+
 Be able to use collaborative tools like git and GitHub
+
 Develop in a variety of environments like Jupyter and VS Code
+
 Throughout the course, students will develop a simple turn-based game played on a 2D grid and playable in the terminal. They will also perform statistical analysis of games played, and visualize this analysis.
 
